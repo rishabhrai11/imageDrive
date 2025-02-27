@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -46,5 +47,9 @@ public class S3Service {
         URL url = s3Client.generatePresignedUrl(generatePresignedUrlRequest);
         return url.toString();
     }
+
+//    public List<String> listAllFiles(){
+//
+//    }
 
 }
