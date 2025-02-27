@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class S3Service {
+public class FileService {
 
     @Autowired
     AmazonS3 s3Client;
@@ -33,7 +33,7 @@ public class S3Service {
         metadata.setContentType(file.getContentType());
 
         s3Client.putObject(new PutObjectRequest(bucketName, fileName, file.getInputStream(), metadata));
-        return generatePreSignedUrl(fileName);
+        return fileName;
     }
 
     public String generatePreSignedUrl(String fileName){

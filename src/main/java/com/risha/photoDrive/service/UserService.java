@@ -1,5 +1,6 @@
 package com.risha.photoDrive.service;
 
+import com.risha.photoDrive.entity.Photo;
 import com.risha.photoDrive.entity.User;
 import com.risha.photoDrive.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -30,8 +31,17 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public void deleteUser(User user) {
+        userRepository.delete(user);
+    }
+
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    public void addPhoto(User user,Photo photo) {
+        user.getPhotos().add(photo);
+        userRepository.save(user);
     }
 
 }

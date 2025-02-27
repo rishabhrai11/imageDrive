@@ -15,7 +15,6 @@ public class Photo {
 
     @Id
     private ObjectId id;
-
     private String filename;
     private long size;
 }
