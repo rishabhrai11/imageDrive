@@ -2,6 +2,7 @@ package com.risha.photoDrive.controller;
 
 import com.risha.photoDrive.entity.Photo;
 import com.risha.photoDrive.entity.User;
+import com.risha.photoDrive.repository.PhotoRepository;
 import com.risha.photoDrive.repository.UserRepository;
 import com.risha.photoDrive.service.FileService;
 import com.risha.photoDrive.service.PhotoService;
@@ -33,6 +34,8 @@ public class FileController {
 
     @Autowired
     private FileService fileService;
+    @Autowired
+    private PhotoRepository photoRepository;
 
     @PostMapping("/upload")
     public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) {
@@ -72,5 +75,41 @@ public class FileController {
         catch(Exception e){
             return new ResponseEntity<>("File list retrieval failed: "+e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @DeleteMapping("/delete-photo")
+    public ResponseEntity<?> deletePhoto(@RequestParam String filename){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userRepository.findByUsername(username);
+        if(user == null){
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        }
+        Photo photo = photoService.findPhotoByFilename(user,filename);
+        photoService.deletePhoto(user,photo);
+        fileService.deleteFile(filename);
+        return new ResponseEntity<>("File deleted", HttpStatus.OK);
+    }
+
+    @GetMapping("/get-photo")
+    public ResponseEntity<?> getPhoto(@RequestParam String filename){
+        try{
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String username = authentication.getName();
+            User user = userRepository.findByUsername(username);
+            if(user == null){
+                return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+            }
+            Photo photo = photoService.findPhotoByFilename(user,filename);
+            if(photo == null){
+                return new ResponseEntity<>("Photo not found", HttpStatus.NOT_FOUND);
+            }
+            String url = fileService.generatePreSignedUrl(photo.getFilename());
+            return new ResponseEntity<>(url, HttpStatus.OK);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>("File retrieval failed: "+e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 }
