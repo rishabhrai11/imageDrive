@@ -6,18 +6,23 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document(collection = "folder")
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "photos")
-public class Photo {
-
+@Builder
+public class Folder {
     @Id
     private ObjectId id;
-    private String filename;
-    private long size;
-    private Folder folder;
+
+    private String name;
+
+    @DBRef
+    private Folder parent;
+    @DBRef
+    private User owner;
+
 }
