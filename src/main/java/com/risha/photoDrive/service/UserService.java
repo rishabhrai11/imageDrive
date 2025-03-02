@@ -42,8 +42,8 @@ public class UserService {
         List<Photo> photos = user.getPhotos();
         for(Photo photo : photos){
             fileService.deleteFile(photo.getFilename());
+            photoRepository.delete(photo);
         }
-        photoRepository.deleteAll(photos);
         userRepository.delete(user);
     }
 

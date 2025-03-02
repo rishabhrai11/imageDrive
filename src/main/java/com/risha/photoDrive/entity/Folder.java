@@ -22,6 +22,7 @@ public class Folder {
 
     @DBRef
     private Folder parent;
+
     @DBRef
     private User owner;
 

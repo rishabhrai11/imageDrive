@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
@@ -19,5 +20,7 @@ public class Photo {
     private ObjectId id;
     private String filename;
     private long size;
+
+    @DBRef
     private Folder folder;
 }

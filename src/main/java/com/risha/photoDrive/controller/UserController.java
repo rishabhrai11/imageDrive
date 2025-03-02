@@ -2,6 +2,7 @@ package com.risha.photoDrive.controller;
 
 import com.risha.photoDrive.entity.User;
 import com.risha.photoDrive.repository.UserRepository;
+import com.risha.photoDrive.service.FolderService;
 import com.risha.photoDrive.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,8 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private FolderService folderService;
     private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @PutMapping("/change-password")
@@ -86,6 +89,7 @@ public class UserController {
             String username = authentication.getName();
             User user = userRepository.findByUsername(username);
             userService.deleteUser(user);
+            folderService.deleteFolder(user,null);
             return new ResponseEntity<>("User deleted!", HttpStatus.OK);
         }
         catch (Exception e) {

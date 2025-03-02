@@ -7,11 +7,14 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface FolderRepository extends MongoRepository<Folder, ObjectId> {
-    List<Folder>  findByOwnerAndParent(User owner, Folder parent);
+    List<Folder> findByOwnerAndParent(User owner, Folder parent);
 
     boolean existsByNameAndOwnerAndParent(String name, User owner, Folder parent);
+
+    Optional<Folder> findByIdAndOwner(ObjectId parentId, User owner);
 }
 
